@@ -12,12 +12,14 @@ public class AlphaBetaO extends AI {
 
     private int counter;
 
+    //here, dito magmomove si AI
     @Override
     public int generateMove(int player, Board board) {
         player_me = player;
         return alphabetaHelper(player, board);
     }
-
+    //since depth limited gamit dito, dito nagiinitialize kung ilan yung depth.
+    //yung getPossibleMoves(), nagawa ko na yung emthod na yun.
     public int alphabetaHelper(int player, Board board) {
         List<Integer> moves = board.getPossibleMoves();
         List<Double> values = new ArrayList();
@@ -49,7 +51,8 @@ public class AlphaBetaO extends AI {
 //            case 2: depth = 19;break;
 //            default: depth = 7;
 //        }
-        
+        //dito papasok si alpha beta, every move, chinecheck nya, RECURSIVELY DIN TO. DEPENDE SA DEPTH
+        //Ken, if u are available sa discord later, let's talk hahaha.
         for(int m : moves) {
             board.makeMove(player, m);
             double score = alphabeta(
@@ -83,6 +86,8 @@ public class AlphaBetaO extends AI {
         System.out.println("");
         return bestMove;
     }
+    //dito si alpha beta. kung nakikita mo recursively sya, until depth 0.
+    //Now, hindi ko alam, wala kaming tree object pero meron kaming recursion tree. does that shit count? HAHAHA
 
     //player is the player that is about to go.
     public double alphabeta(
@@ -131,6 +136,7 @@ public class AlphaBetaO extends AI {
     public static final int[][] weights =
         { {0, 1, 2, 3, 2, 1, 0}, {1, 2, 3, 4, 3, 2, 1}, {2, 3, 4, 5, 4, 3, 2},
         {3, 4, 5, 6, 5, 4, 3}, {2, 3, 4, 5, 4, 3, 2}, {1, 2, 3, 4, 3, 2, 1}};
+    //dis is the fucking performance measure, 1 and 2 is represented by each player.
 
     public double evaluate(int player, Board board, int depth) {
         
@@ -150,12 +156,16 @@ public class AlphaBetaO extends AI {
         mega.addAll(board.diagonals);
 
         double result = 0;
-
+        //try to observe, that each node/state may kanya kanyang values, depende sa placement ng
+        //coins, kung gaano kapanuo yung board, may malapit na ba mag connect four? mas mataas ang maxmimize/minimize
+        //depende kung ikaw si max or min.
         if (player_me == 1) {
             megasearch:
             for (String s : mega) {
                 if (s.contains("1111")) {
                     result = 1000;
+
+                    //so yon, if 1111 yan, means connect four. panalo na si player 1. break thy loop. result=1000;
                     break megasearch;
                 }
                 else if(s.contains("2222")) {
